@@ -1,0 +1,2377 @@
+# ESP32-3248S035C Multi-Page Display
+# ============================================================
+
+substitutions:
+  name: esphome-web-f1531c
+  friendly_name: "ESP32-CYD 1"
+  device_version: "1.2.0"
+
+# ============================================================
+# Core Configuration
+# ============================================================
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  project:
+    name: "shane.esp32_display"
+    version: "${device_version}"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  
+  ap:
+    ssid: ${friendly_name}
+    password: !secret ap_password
+
+captive_portal:
+
+# ============================================================
+# Global Variables
+# ============================================================
+globals:
+  - id: current_page
+    type: int
+    initial_value: '0'
+  - id: current_theme
+    type: int
+    initial_value: '0'
+  - id: last_gesture
+    type: uint32_t
+    initial_value: '0'
+  - id: screen_timeout
+    type: int
+    initial_value: '30'
+  - id: last_activity
+    type: uint32_t
+    initial_value: '0'
+  - id: backlight_timeout
+    type: uint32_t
+    initial_value: '30000'
+  - id: refresh_button_number
+    type: int
+    restore_value: no
+    initial_value: '0' 
+  - id: weather_icon
+    type: std::string
+    restore_value: no
+    initial_value: '""'
+  
+  # Button Icons
+  - id: btn_icon_1
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_2
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_3
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_4
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_5
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_6
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_7
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_8
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_9
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_10
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_11
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_12
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_13
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_14
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_15
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_16
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_17
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_18
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_19
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_20
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_21
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_22
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_23
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  - id: btn_icon_24
+    type: std::string
+    initial_value: '"\U0000e0f0"'
+  ### Button Label
+  - id: btn_label_1
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_2
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_3
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_4
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_5
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_6
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_7
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_8
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_9
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_10
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_11
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_12
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_13
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_14
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_15
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_16
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_17
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_18
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_19
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_20
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_21
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_22
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_23
+    type: std::string
+    initial_value: '"Device Name"'
+  - id: btn_label_24
+    type: std::string
+    initial_value: '"Device Name"'
+  
+  # Button colors
+  - id: btn_color_1
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_2
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_3
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_4
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_5
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_6
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_7
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_8
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_9
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_10
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_11
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_12
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_13
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_14
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_15
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_16
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_17
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_18
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_19
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_20
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_21
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_22
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_23
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: btn_color_24
+    type: int
+    initial_value: '0x1F1F1F'
+ ### Button Set Colors 
+  - id: set_bg_color
+    type: int
+    initial_value: '0x000000'
+  - id: set_border_color
+    type: int
+    initial_value: '0x1F1F1F'
+  - id: set_text_color
+    type: int
+    initial_value: '0xDCDCDC'
+
+
+# ============================================================
+# Colors
+# ============================================================
+color:
+  - id: dark_bg_color
+    hex: "1F1F1F"
+  - id: dark_border_color
+    hex: "444444"
+  - id: dark_font_color
+    hex: "1F1F1F"
+
+  - id: light_bg_color
+    hex: "F5F5F5"
+  - id: light_border_color
+    hex: "CCCCCC"
+
+  - id: amoled_bg_color
+    hex: "0A0A0A"
+  - id: amoled_border_color
+    hex: "222222"
+
+# ============================================================
+# Fonts (Using Google Fonts only - no local fonts)
+# ============================================================
+font:
+  - file: "gfonts://Roboto"
+    id: roboto_16
+    size: 16
+  - file: "gfonts://Roboto"
+    id: roboto_24
+    size: 24
+  - file: "gfonts://Roboto"
+    id: roboto_36
+    size: 36
+  - file: "gfonts://Roboto"
+    id: roboto_48
+    size: 48
+  - file: "gfonts://Roboto"
+    id: roboto_105
+    size: 105
+  - file: "gfonts://Material+Symbols+Outlined"
+    id: font_mdi_30
+    size: 30
+    glyphs: [
+      "\U0000E88A",  # home
+      "\U0000E8B8",  # settings
+      "\U0000e5cb",  # left
+      "\U0000e5cc",  # Right
+    ]
+  - file: "gfonts://Material+Symbols+Outlined"
+    id: font_mdi
+    size: 50
+    glyphs: [
+      "\U0000f02a",  # sconce
+      "\U0000f168",  # fan
+      "\U0000e0f0",  # lightbulb
+      "\U0000f29b",  # Dine Lamp
+      "\U0000e21e",  # lamp
+      "\U0000ec12",  # shades
+      "\U0000ebbc",  # Factory
+      "\U0000e63c",  # power icon
+      "\U0000e897",  # lock closed
+      "\U0000e855",  # alarm
+      "\U0000f3a7",  # siren
+      "\U0000efe9",  # camera
+      "\U0000E5CD",  # close
+      "\U0000E8B8",  # settings
+      "\U0000E7C8",  # fire
+      "\U0000ec1c",  # lightning
+      "\U0000f292",  # heart
+      "\U0000E88A",  # home
+      "\U0000E5D2",  # menu
+      "\U0000E3FA",  # microphone
+      "\U0000e61d",  # phone
+      "\U0000f149",  # dog
+      "\U0000e91d",  # pets
+      "\U0000e5d5",  # refresh
+      "\U0000e81a",  # weather sunny
+      "\U0000f34f",  # weather night
+      "\U0000f174",  # partly cloudy night
+      "\U0000f172",  # partly cloudy day
+      "\U0000e2bd",  # cloudy
+      "\U0000e818",  # fog
+      "\U0000f67f",  # hail
+      "\U0000ebdb",  # lightning
+      "\U0000f176",  # rainy
+      "\U0000e2cd",  # snowy
+      "\U0000ec0c",  # windy
+      "\U0000e199",  # tornado
+    ]
+    
+
+
+# ============================================================
+# Time Component
+# ============================================================
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time:
+      - seconds: /30
+        then:
+          - lambda: |-
+              auto time = id(homeassistant_time).now();
+              int hour = time.hour;
+              int minute = time.minute;
+              char time_str[6];
+              sprintf(time_str, "%02d:%02d", hour, minute);
+              auto time_obj = id(time_label);
+              if (time_obj != nullptr) {
+                lv_label_set_text(time_obj, time_str);
+              }
+              
+              static const char* DAYS[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+              static const char* MONTHS[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+              char date_str[32];
+              sprintf(date_str, "%s, %s %d", DAYS[time.day_of_week - 1], MONTHS[time.month - 1], time.day_of_month);
+              auto date_obj = id(date_label);
+              if (date_obj != nullptr) {
+                lv_label_set_text(date_obj, date_str);
+              }
+              
+              if (wifi::global_wifi_component->is_connected()) {
+                float db = wifi::global_wifi_component->wifi_rssi();
+                int strength = (int)(std::min(std::max((db + 100.0) * 2.0, 0.0), 100.0));
+                char signal_str[8];
+                sprintf(signal_str, "%d%%", strength);
+                auto wifi_obj = id(wifi_signal);
+                if (wifi_obj != nullptr) {
+                  lv_label_set_text(wifi_obj, signal_str);
+                  id(firmware_version).publish_state("${device_version} Version");
+                }
+                
+                auto addresses = wifi::global_wifi_component->get_ip_addresses();
+                if (!addresses.empty()) {
+                  char ip_str[16];
+                  sprintf(ip_str, "%s", addresses[0].str().c_str());
+                  auto ip_obj = id(ip_address);
+                  if (ip_obj != nullptr) {
+                    lv_label_set_text(ip_obj, ip_str);
+                  }
+                }
+              } else {
+                auto wifi_obj = id(wifi_signal);
+                if (wifi_obj != nullptr) {
+                  lv_label_set_text(wifi_obj, "Not Connected");
+                }
+                auto ip_obj = id(ip_address);
+                if (ip_obj != nullptr) {
+                  lv_label_set_text(ip_obj, "Not Connected");
+                }
+              }
+
+# ============================================================
+# Screen Timeout Interval
+# ============================================================
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          if (id(backlight).current_values.is_on()) {
+            uint32_t timeout_ms = id(screen_timeout) * 1000;
+            if (millis() - id(last_activity) >= timeout_ms) {
+              auto call = id(backlight).turn_off();
+              call.perform();
+              id(lvgl_homepage).execute();
+              id(lvgl_pause).execute();
+            }
+          }
+
+# ============================================================
+# Backlight and LED Control
+# ============================================================
+output:
+  - platform: ledc
+    pin: GPIO27
+    id: backlight_pwm
+  - platform: ledc
+    pin: GPIO04
+    id: led_red
+    inverted: true
+  - platform: ledc
+    pin: GPIO16
+    id: led_green
+    inverted: true
+  - platform: ledc
+    pin: GPIO17
+    id: led_blue
+    inverted: true
+
+light:
+  - platform: monochromatic
+    id: backlight
+    output: backlight_pwm
+    restore_mode: ALWAYS_ON
+    default_transition_length: 0s
+    # onboard rgb led
+  - platform: rgb
+    name: "Front LED"
+    id: front_led
+    restore_mode: ALWAYS_OFF
+    red: led_red
+    green: led_green
+    blue: led_blue
+
+# ============================================================
+# SPI/I2C Bus
+# ============================================================
+spi:
+  - id: spi_tft
+    clk_pin: GPIO14
+    mosi_pin: GPIO13
+    miso_pin: GPIO12
+i2c:
+  id: i2c_bus1
+  sda: GPIO33
+  scl: GPIO32
+
+# ============================================================
+# Display Configuration
+# ============================================================
+display:
+  - platform: ili9xxx
+    id: my_display
+    model: ST7796
+    spi_id: spi_tft
+    dc_pin: GPIO2
+    cs_pin: GPIO15
+    dimensions:
+      width: 480
+      height: 320
+    data_rate: 80MHz
+    color_order: BGR
+    invert_colors: false
+    update_interval: never
+    auto_clear_enabled: false
+    show_test_card: false
+    transform:
+      swap_xy: true
+      mirror_y: false
+      mirror_x: false
+
+# ============================================================
+# Touchscreen Configuration
+# ============================================================
+touchscreen:
+  - platform: gt911
+    id: my_touch
+    display: my_display
+    i2c_id: i2c_bus1
+    #interrupt_pin: GPIO21
+    update_interval: 50ms
+    transform:
+        swap_xy: true
+        mirror_x: false
+        mirror_y: true
+    on_touch:
+      then:
+        - lambda: |-
+            ESP_LOGI("cal", "x=%d, y=%d, x_raw=%d, y_raw=%0d",
+                touch.x,
+                touch.y,
+                touch.x_raw,
+                touch.y_raw
+                );
+            static int16_t start_x = 0;
+            static int16_t start_y = 0;
+            static uint32_t touch_start = 0;
+            if (touch.x_raw != 0 || touch.y_raw != 0) {
+              if (touch_start == 0) {
+                start_x = touch.x;
+                start_y = touch.y;
+                touch_start = millis();
+              }
+              id(last_activity) = millis();
+              if (!id(backlight).current_values.is_on()) {
+                auto call = id(backlight).turn_on();
+                call.perform();
+                id(lvgl_resume).execute();
+              }
+            } else {
+              if (touch_start != 0) {
+                int dx = touch.x - start_x;
+                int dy = touch.y - start_y;
+                ESP_LOGI("touch","dx=%d, dy=%d",
+                    dx,
+                    dy
+                    );
+                if (abs(dx) > 80 && abs(dx) > abs(dy)) {
+                  int new_page = id(current_page) + (dx < 0 ? 1 : -1);
+                  if (new_page > 3) new_page = 0;
+                  if (new_page < 0) new_page = 3;
+                  id(current_page) = new_page;
+                  // Optionally call a service here
+                }
+                touch_start = 0;
+              }
+            }
+
+
+# ============================================================
+# Binary Sensors for Button Presses
+# ============================================================
+binary_sensor:
+  - platform: template
+    name: "Button 1 Press"
+    id: btn_1_press
+  - platform: template
+    name: "Button 2 Press"
+    id: btn_2_press
+  - platform: template
+    name: "Button 3 Press"
+    id: btn_3_press
+  - platform: template
+    name: "Button 4 Press"
+    id: btn_4_press
+  - platform: template
+    name: "Button 5 Press"
+    id: btn_5_press
+  - platform: template
+    name: "Button 6 Press"
+    id: btn_6_press
+  - platform: template
+    name: "Button 7 Press"
+    id: btn_7_press
+  - platform: template
+    name: "Button 8 Press"
+    id: btn_8_press
+  - platform: template
+    name: "Button 9 Press"
+    id: btn_9_press
+  - platform: template
+    name: "Button 10 Press"
+    id: btn_10_press
+  - platform: template
+    name: "Button 11 Press"
+    id: btn_11_press
+  - platform: template
+    name: "Button 12 Press"
+    id: btn_12_press
+  - platform: template
+    name: "Button 13 Press"
+    id: btn_13_press
+  - platform: template
+    name: "Button 14 Press"
+    id: btn_14_press
+  - platform: template
+    name: "Button 15 Press"
+    id: btn_15_press
+  - platform: template
+    name: "Button 16 Press"
+    id: btn_16_press
+  - platform: template
+    name: "Button 17 Press"
+    id: btn_17_press
+  - platform: template
+    name: "Button 18 Press"
+    id: btn_18_press
+  - platform: template
+    name: "Button 19 Press"
+    id: btn_19_press
+  - platform: template
+    name: "Button 20 Press"
+    id: btn_20_press
+  - platform: template
+    name: "Button 21 Press"
+    id: btn_21_press
+  - platform: template
+    name: "Button 22 Press"
+    id: btn_22_press
+  - platform: template
+    name: "Button 23 Press"
+    id: btn_23_press
+  - platform: template
+    name: "Button 24 Press"
+    id: btn_24_press
+  - platform: template
+    name: "Button Refresh Press"
+    id: btn_refresh_press
+
+
+# ============================================================
+# Version Sensor
+# ============================================================
+sensor:
+  - platform: homeassistant
+    id: ha_temperature
+    entity_id: weather.home2
+    attribute: temperature
+    internal: true
+    on_value:
+      then:
+        - lvgl.widget.refresh: temp_label
+        - lambda: |-
+            ESP_LOGD("ha_temperature", "The current value is %f", id(ha_temperature).state);
+
+text_sensor:
+  - platform: template
+    name: "Software Version"
+    id: firmware_version
+    icon: mdi:TextBox
+
+  - platform: template
+    name: "Button Pushed"
+    id: button_pushed
+    icon: mdi:ButtonPointer
+
+  - platform: homeassistant
+    id: ha_weather_condition
+    entity_id: weather.home2
+    on_value:
+      then:
+        lambda: |-
+          ESP_LOGD("ha_weather_condition", "The current value is %s", x.c_str());
+          // Map icon names to glyphs (unicode private use area chars)
+          std::string glyph;
+          std::string test1;
+          if (strcmp(x.c_str(), "sunny") == 0) {
+            glyph = "\U0000e81a";  // U+E81A weather sunny
+            test1 = "1";
+          } else if (strcmp(x.c_str(), "clear-night") == 0) {
+            glyph = "\U0000f34f";  // U+F34F weather night
+            test1 = "2";
+          } else if (strcmp(x.c_str(), "partlycloudy-night") == 0) {
+            glyph = "\U0000f174";  // U+F174 partly cloudy night
+            test1 = "3";
+          } else if (strcmp(x.c_str(), "partlycloudy") == 0) {
+            glyph = "\U0000f172";  // U+F172 partly cloudy day
+            test1 = "4";
+          } else if (strcmp(x.c_str(), "cloudy") == 0) {
+            glyph = "\U0000e2bd";   // U+E2BD cloudy
+            test1 = "5";
+          } else if (strcmp(x.c_str(), "fog") == 0) {
+            glyph = "\U0000e818";   // U+E818 fog
+            test1 = "6";
+          } else if (strcmp(x.c_str(), "hail") == 0) {
+            glyph = "\U0000f67f";   // U+F67F hail
+            test1 = "7";
+          } else if (strcmp(x.c_str(), "lightning") == 0) {
+            glyph = "\U0000ebdb";   // U+EBDB lightning
+            test1 = "8";
+          } else if (strcmp(x.c_str(), "rainy") == 0) {
+            glyph = "\U0000f176";   // U+F176 rainy
+            test1 = "9";
+          } else if (strcmp(x.c_str(), "snowy") == 0) {
+            glyph = "\U0000e2cd";   // U+E2CD snowy
+            test1 = "10";
+          } else if (strcmp(x.c_str(), "windy") == 0) {
+            glyph = "\U0000ec0c";   // U+EC0C windy
+            test1 = "11";
+          } else if (strcmp(x.c_str(), "exceptional") == 0) {
+            glyph = "\U0000e199";   // U+E199 tornado
+            test1 = "12";
+          } else {
+            glyph = "\U0000e199";   // default tornado fallback
+            test1 = "99";
+          }
+          ESP_LOGD("ha_weather_condition", "The current glyph is %s", test1);
+          id(weather_icon) = glyph;
+          id(refresh_weather_icon).execute();
+          
+# ============================================================
+# LVGL Interface
+# ============================================================
+lvgl:
+  displays:
+    - my_display
+  touchscreens:
+    - my_touch
+  theme:
+    button:
+      bg_color: !lambda 'return lv_color_hex(id(set_bg_color));'
+      border_color: !lambda 'return lv_color_hex(id(set_border_color));'
+      border_width: 2
+      radius: 8
+      text_font: font_mdi
+      shadow_color: 0xAAAAAA
+      shadow_opa: 40%
+      shadow_ofs_x: 2
+      shadow_ofs_y: 4
+      pressed:
+        bg_color: 0xE0E0E0
+        border_color: 0x888888
+
+  
+  style_definitions:
+    - id: header_footer
+      bg_color: 0x999999
+      bg_grad_color: 0x444444
+      bg_grad_dir: VER
+      bg_opa: COVER
+      border_opa: TRANSP
+      radius: 0
+      pad_all: 0
+      pad_row: 0
+      pad_column: 0
+      border_color: 0x444444
+      text_color: 0xFFFFFF
+      text_font: font_mdi_30
+      width: 100%
+      height: 50
+
+  pages:
+    # Home Page
+    - id: home_page
+      bg_color: black
+      outline_color: yellow
+      widgets:
+  ### PAGE 1 
+        - label:
+            id: time_label
+            text: "12:00"
+            text_font: roboto_105
+            text_color: 0xffffff
+            x: 110
+            y: 60
+        - label:
+            id: date_label
+            text: "Monday, Jan 1"
+            text_font: roboto_36
+            text_color: 0xffffff
+            x: 140
+            y: 220
+        - label:
+            id: weather_icon_lbl
+            text: !lambda 'return id(weather_icon).c_str();'
+            text_font : font_mdi
+            text_color: 0xffffff
+            x: 10
+            y: 10
+        - label:
+            id: temp_label
+            text: !lambda |-
+              int temp_int = (int)round(id(ha_temperature).state);
+              return to_string(temp_int) + "°F";
+            text_font: roboto_24
+            text_color: 0xffffff
+            x: 10
+            y: 65
+
+
+    # Button Grid Page 1 (Buttons 1-12)
+    - id: button_page_1
+      bg_color: black
+      outline_color: yellow
+      widgets:
+        - button:
+            id: btn_1
+            x: 0
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_1
+                  text: !lambda 'return id(btn_icon_1).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_1));'
+              - label:
+                  id: btn_label_widget_1
+                  text: !lambda 'return id(btn_label_1).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_1_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "1"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_1_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_2
+            x: 120
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_2
+                  text: !lambda 'return id(btn_icon_2).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_2));'
+              - label:
+                  id: btn_label_widget_2
+                  text: !lambda 'return id(btn_label_2).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_2_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "2"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_2_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_3
+            x: 240
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_3
+                  text: !lambda 'return id(btn_icon_3).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_3));'
+              - label:
+                  id: btn_label_widget_3
+                  text: !lambda 'return id(btn_label_3).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_3_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "3"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_3_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_4
+            x: 360
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_4
+                  text: !lambda 'return id(btn_icon_4).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_4));'
+              - label:
+                  id: btn_label_widget_4
+                  text: !lambda 'return id(btn_label_4).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_4_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "4"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_4_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_5
+            x: 0
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_5
+                  text: !lambda 'return id(btn_icon_5).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_5));'
+              - label:
+                  id: btn_label_widget_5
+                  text: !lambda 'return id(btn_label_5).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_5_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "5"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_5_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_6
+            x: 120
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_6
+                  text: !lambda 'return id(btn_icon_6).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_6));'
+              - label:
+                  id: btn_label_widget_6
+                  text: !lambda 'return id(btn_label_6).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_6_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "6"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_6_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_7
+            x: 240
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_7
+                  text: !lambda 'return id(btn_icon_7).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_7));'
+              - label:
+                  id: btn_label_widget_7
+                  text: !lambda 'return id(btn_label_7).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_7_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "7"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_7_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_8
+            x: 360
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_8
+                  text: !lambda 'return id(btn_icon_8).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_8));'
+              - label:
+                  id: btn_label_widget_8
+                  text: !lambda 'return id(btn_label_8).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_8_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "8"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_8_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_9
+            x: 0
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_9
+                  text: !lambda 'return id(btn_icon_9).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_9));'
+              - label:
+                  id: btn_label_widget_9
+                  text: !lambda 'return id(btn_label_9).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_9_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "9"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_9_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_10
+            x: 120
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_10
+                  text: !lambda 'return id(btn_icon_10).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_10));'
+              - label:
+                  id: btn_label_widget_10
+                  text: !lambda 'return id(btn_label_10).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_10_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "10"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_10_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_11
+            x: 240
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_11
+                  text: !lambda 'return id(btn_icon_11).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_11));'
+              - label:
+                  id: btn_label_widget_11
+                  text: !lambda 'return id(btn_label_11).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_11_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "11"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_11_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_12
+            x: 360
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_12
+                  text: !lambda 'return id(btn_icon_12).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_12));'
+              - label:
+                  id: btn_label_widget_12
+                  text: !lambda 'return id(btn_label_12).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_12_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "12"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_12_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+    - id: button_page_2
+      bg_color: black
+      outline_color: yellow
+      widgets:
+        # Button Grid Page 2 (Buttons 13-24)
+        - button:
+            id: btn_13
+            x: 0
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_13
+                  text: !lambda 'return id(btn_icon_13).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_13));'
+              - label:
+                  id: btn_label_widget_13
+                  text: !lambda 'return id(btn_label_13).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_13_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "13"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_13_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_14
+            x: 120
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_14
+                  text: !lambda 'return id(btn_icon_14).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_14));'
+              - label:
+                  id: btn_label_widget_14
+                  text: !lambda 'return id(btn_label_14).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_14_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "14"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_14_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_15
+            x: 240
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_15
+                  text: !lambda 'return id(btn_icon_15).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_15));'
+              - label:
+                  id: btn_label_widget_15
+                  text: !lambda 'return id(btn_label_15).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_15_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "15"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_15_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_16
+            x: 360
+            y: 0
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_16
+                  text: !lambda 'return id(btn_icon_16).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_16));'
+              - label:
+                  id: btn_label_widget_16
+                  text: !lambda 'return id(btn_label_16).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_16_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "16"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_16_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_17
+            x: 0
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_17
+                  text: !lambda 'return id(btn_icon_17).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_17));'
+              - label:
+                  id: btn_label_widget_17
+                  text: !lambda 'return id(btn_label_17).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_17_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "17"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_17_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_18
+            x: 120
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_18
+                  text: !lambda 'return id(btn_icon_18).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_18));'
+              - label:
+                  id: btn_label_widget_18
+                  text: !lambda 'return id(btn_label_18).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_18_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "18"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_18_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_19
+            x: 240
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_19
+                  text: !lambda 'return id(btn_icon_19).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_19));'
+              - label:
+                  id: btn_label_widget_19
+                  text: !lambda 'return id(btn_label_19).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_19_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "19"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_19_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_20
+            x: 360
+            y: 90
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_20
+                  text: !lambda 'return id(btn_icon_20).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_20));'
+              - label:
+                  id: btn_label_widget_20
+                  text: !lambda 'return id(btn_label_20).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_20_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "20"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_20_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_21
+            x: 0
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_21
+                  text: !lambda 'return id(btn_icon_21).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_21));'
+              - label:
+                  id: btn_label_widget_21
+                  text: !lambda 'return id(btn_label_21).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_21_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "21"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_21_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_22
+            x: 120
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_22
+                  text: !lambda 'return id(btn_icon_22).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_22));'
+              - label:
+                  id: btn_label_widget_22
+                  text: !lambda 'return id(btn_label_22).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_22_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "22"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_22_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_23
+            x: 240
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_23
+                  text: !lambda 'return id(btn_icon_23).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_23));'
+              - label:
+                  id: btn_label_widget_23
+                  text: !lambda 'return id(btn_label_23).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_23_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "23"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_23_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+        - button:
+            id: btn_24
+            x: 360
+            y: 180
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_24
+                  text: !lambda 'return id(btn_icon_24).c_str();'
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(btn_color_24));'
+              - label:
+                  id: btn_label_widget_24
+                  text: !lambda 'return id(btn_label_24).c_str();'
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_24_press
+                  state: true
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "24"
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_24_press
+                  state: false
+              - text_sensor.template.publish:
+                  id: button_pushed
+                  state: "0"
+
+
+
+    # Settings Page
+    - id: settings_page
+      bg_color: black
+      outline_color: yellow
+      widgets:
+        - label:
+            text: "Settings"
+            text_font: roboto_36
+            text_color: 0xffffff
+            x: 180
+            y: 10
+        - label:
+            text: "Brightness"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 20
+            y: 60
+        - slider:
+            id: brightness_slider
+            x: 150
+            y: 60
+            width: 300
+            height: 20
+            min_value: 0
+            max_value: 100
+            value: 100
+            on_value:
+              - light.turn_on:
+                  id: backlight
+                  brightness: !lambda "return x / 100.0;"
+        - label:
+            text: "Screen Timeout"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 20
+            y: 110
+        - label:
+            id: timeout_value_label
+            text: "30s"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 400
+            y: 110
+        - slider:
+            id: timeout_slider
+            x: 150
+            y: 110
+            width: 230
+            height: 20
+            min_value: 10
+            max_value: 300
+            value: 30
+            on_value:
+              - lambda: |-
+                  id(screen_timeout) = x;
+                  char time_str[8];
+                  sprintf(time_str, "%ds", (int)x);
+                  auto label_obj = id(timeout_value_label);
+                  if (label_obj != nullptr) {
+                    lv_label_set_text(label_obj, time_str);
+                  }
+        - label:
+            text: "Name"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 20
+            y: 160
+        - label:
+            id: name_value
+            text: "${friendly_name}"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 150
+            y: 160
+        - label:
+            text: "Version"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 20
+            y: 190
+        - label:
+            id: version_value
+            text: "${device_version}"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 150
+            y: 190
+        - label:
+            text: "WiFi Signal"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 20
+            y: 220
+        - label:
+            id: wifi_signal
+            text: "Not Connected"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 150
+            y: 220
+        - label:
+            text: "IP Address"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 20
+            y: 250
+        - label:
+            id: ip_address
+            text: "Not Connected"
+            text_font: roboto_16
+            text_color: 0xffffff
+            x: 150
+            y: 250
+        - button:
+            id: reload
+            x: 360
+            y: 160
+            width: 120
+            height: 90
+            widgets:
+              - label:
+                  id: btn_icon_widget_reload
+                  text: "\U0000e5d5"
+                  align: center
+                  y: -5
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+              - label:
+                  id: btn_label_widget_reload
+                  text: "Reload"
+                  align: bottom_mid
+                  text_font: 'roboto_16'
+                  text_color: !lambda 'return lv_color_hex(id(set_text_color));'
+            on_press:
+              - binary_sensor.template.publish:
+                  id: btn_refresh_press
+                  state: ON
+              - delay: 500ms
+              - binary_sensor.template.publish:
+                  id: btn_refresh_press
+                  state: OFF
+
+  # Global Navigation Bar
+  top_layer:
+    widgets:
+      - buttonmatrix:
+          align: bottom_mid
+          styles: header_footer
+          pad_all: 0
+          outline_width: 0
+          id: top_layer
+          items:
+            styles: header_footer
+          rows:
+            - buttons:
+              - id: page_prev_1
+                text: "\U0000e5cb"
+                on_press:
+                  then:
+                    lvgl.page.previous:
+              - id: page_home
+                text: "\U0000E88A"
+                on_press:
+                  then:
+                    lvgl.page.show: home_page
+              - id: page_next_1
+                text: "\U0000e5cc"
+                on_press:
+                  then:
+                    lvgl.page.next:
+              - id: page_setting
+                text: "\U0000E8B8"
+                on_press:
+                  then:
+                    lvgl.page.show: settings_page
+
+# ============================================================
+# Script Commands
+# ============================================================
+script:
+  - id: page_next
+    then:
+      - lvgl.page.next
+
+  - id: page_prev
+    then:
+      - lvgl.page.previous
+
+  - id: page_refresh
+    then:
+      - lvgl.widget.redraw
+
+  - id: refresh_btn_1
+    then:
+      - lvgl.widget.refresh: btn_label_widget_1
+      - lvgl.widget.refresh: btn_icon_widget_1
+
+  - id: refresh_btn_2
+    then:
+      - lvgl.widget.refresh: btn_label_widget_2
+      - lvgl.widget.refresh: btn_icon_widget_2
+
+  - id: refresh_btn_3
+    then:
+      - lvgl.widget.refresh: btn_label_widget_3
+      - lvgl.widget.refresh: btn_icon_widget_3
+
+  - id: refresh_btn_4
+    then:
+      - lvgl.widget.refresh: btn_label_widget_4
+      - lvgl.widget.refresh: btn_icon_widget_4
+
+  - id: refresh_btn_5
+    then:
+      - lvgl.widget.refresh: btn_label_widget_5
+      - lvgl.widget.refresh: btn_icon_widget_5
+
+  - id: refresh_btn_6
+    then:
+      - lvgl.widget.refresh: btn_label_widget_6
+      - lvgl.widget.refresh: btn_icon_widget_6
+
+  - id: refresh_btn_7
+    then:
+      - lvgl.widget.refresh: btn_label_widget_7
+      - lvgl.widget.refresh: btn_icon_widget_7
+
+  - id: refresh_btn_8
+    then:
+      - lvgl.widget.refresh: btn_label_widget_8
+      - lvgl.widget.refresh: btn_icon_widget_8
+
+  - id: refresh_btn_9
+    then:
+      - lvgl.widget.refresh: btn_label_widget_9
+      - lvgl.widget.refresh: btn_icon_widget_9
+
+  - id: refresh_btn_10
+    then:
+      - lvgl.widget.refresh: btn_label_widget_10
+      - lvgl.widget.refresh: btn_icon_widget_10
+
+  - id: refresh_btn_11
+    then:
+      - lvgl.widget.refresh: btn_label_widget_11
+      - lvgl.widget.refresh: btn_icon_widget_11
+
+  - id: refresh_btn_12
+    then:
+      - lvgl.widget.refresh: btn_label_widget_12
+      - lvgl.widget.refresh: btn_icon_widget_12
+
+  - id: refresh_btn_13
+    then:
+      - lvgl.widget.refresh: btn_label_widget_13
+      - lvgl.widget.refresh: btn_icon_widget_13
+
+  - id: refresh_btn_14
+    then:
+      - lvgl.widget.refresh: btn_label_widget_14
+      - lvgl.widget.refresh: btn_icon_widget_14
+
+  - id: refresh_btn_15
+    then:
+      - lvgl.widget.refresh: btn_label_widget_15
+      - lvgl.widget.refresh: btn_icon_widget_15
+
+  - id: refresh_btn_16
+    then:
+      - lvgl.widget.refresh: btn_label_widget_16
+      - lvgl.widget.refresh: btn_icon_widget_16
+
+  - id: refresh_btn_17
+    then:
+      - lvgl.widget.refresh: btn_label_widget_17
+      - lvgl.widget.refresh: btn_icon_widget_17
+
+  - id: refresh_btn_18
+    then:
+      - lvgl.widget.refresh: btn_label_widget_18
+      - lvgl.widget.refresh: btn_icon_widget_18
+
+  - id: refresh_btn_19
+    then:
+      - lvgl.widget.refresh: btn_label_widget_19
+      - lvgl.widget.refresh: btn_icon_widget_19
+
+  - id: refresh_btn_20
+    then:
+      - lvgl.widget.refresh: btn_label_widget_20
+      - lvgl.widget.refresh: btn_icon_widget_20
+
+  - id: refresh_btn_21
+    then:
+      - lvgl.widget.refresh: btn_label_widget_21
+      - lvgl.widget.refresh: btn_icon_widget_21
+
+  - id: refresh_btn_22
+    then:
+      - lvgl.widget.refresh: btn_label_widget_22
+      - lvgl.widget.refresh: btn_icon_widget_22
+
+  - id: refresh_btn_23
+    then:
+      - lvgl.widget.refresh: btn_label_widget_23
+      - lvgl.widget.refresh: btn_icon_widget_23
+
+  - id: refresh_btn_24
+    then:
+      - lvgl.widget.refresh: btn_label_widget_24
+      - lvgl.widget.refresh: btn_icon_widget_24
+  
+  - id: refresh_weather_icon
+    then:
+      - lvgl.widget.refresh: weather_icon_lbl
+
+  - id: lvgl_pause
+    then:
+      - lvgl.pause:
+          show_snow: true
+
+  - id: lvgl_resume
+    then:
+      - lvgl.resume:
+
+  - id: lvgl_homepage
+    then:
+      - lvgl.page.show: home_page
+
+  - id: refresh_button_by_number
+    then:
+      - lambda: |-
+          int button_number = id(refresh_button_number);
+          switch(button_number) {
+            case 1: id(refresh_btn_1).execute(); break;
+            case 2: id(refresh_btn_2).execute(); break;
+            case 3: id(refresh_btn_3).execute(); break;
+            case 4: id(refresh_btn_4).execute(); break;
+            case 5: id(refresh_btn_5).execute(); break;
+            case 6: id(refresh_btn_6).execute(); break;
+            case 7: id(refresh_btn_7).execute(); break;
+            case 8: id(refresh_btn_8).execute(); break;
+            case 9: id(refresh_btn_9).execute(); break;
+            case 10: id(refresh_btn_10).execute(); break;
+            case 11: id(refresh_btn_11).execute(); break;
+            case 12: id(refresh_btn_12).execute(); break;
+            case 13: id(refresh_btn_13).execute(); break;
+            case 14: id(refresh_btn_14).execute(); break;
+            case 15: id(refresh_btn_15).execute(); break;
+            case 16: id(refresh_btn_16).execute(); break;
+            case 17: id(refresh_btn_17).execute(); break;
+            case 18: id(refresh_btn_18).execute(); break;
+            case 19: id(refresh_btn_19).execute(); break;
+            case 20: id(refresh_btn_20).execute(); break;
+            case 21: id(refresh_btn_21).execute(); break;
+            case 22: id(refresh_btn_22).execute(); break;
+            case 23: id(refresh_btn_23).execute(); break;
+            case 24: id(refresh_btn_24).execute(); break;
+          }
+# ============================================================
+# Home Assistant API and Services
+# ============================================================
+api:
+  encryption:
+    key: !secret api_key
+  services:
+    # Set button label only
+    - service: set_button_label
+      variables:
+        button_number: int
+        label_text: string
+      then:
+        - lambda: |-
+            ESP_LOGD("main", "Button %d label set to %s, length=%d", button_number, label_text.c_str(), label_text.length());
+        - lambda: |-
+            if (button_number >= 1 && button_number <= 24) {
+              switch(button_number) {
+                case 1: id(btn_label_1) = label_text; break;
+                case 2: id(btn_label_2) = label_text; break;
+                case 3: id(btn_label_3) = label_text; break;
+                case 4: id(btn_label_4) = label_text; break;
+                case 5: id(btn_label_5) = label_text; break;
+                case 6: id(btn_label_6) = label_text; break;
+                case 7: id(btn_label_7) = label_text; break;
+                case 8: id(btn_label_8) = label_text; break;
+                case 9: id(btn_label_9) = label_text; break;
+                case 10: id(btn_label_10) = label_text; break;
+                case 11: id(btn_label_11) = label_text; break;
+                case 12: id(btn_label_12) = label_text; break;
+                case 13: id(btn_label_13) = label_text; break;
+                case 14: id(btn_label_14) = label_text; break;
+                case 15: id(btn_label_15) = label_text; break;
+                case 16: id(btn_label_16) = label_text; break;
+                case 17: id(btn_label_17) = label_text; break;
+                case 18: id(btn_label_18) = label_text; break;
+                case 19: id(btn_label_19) = label_text; break;
+                case 20: id(btn_label_20) = label_text; break;
+                case 21: id(btn_label_21) = label_text; break;
+                case 22: id(btn_label_22) = label_text; break;
+                case 23: id(btn_label_23) = label_text; break;
+                case 24: id(btn_label_24) = label_text; break;
+              }
+            }
+        - lambda: |-
+            id(refresh_button_number) = button_number;
+            id(refresh_button_by_number).execute();
+            
+    # Set button icon only
+    - service: set_button_icon
+      variables:
+        button_number: int
+        icon_name: string
+      then:
+        - lambda: |-
+            if (button_number >= 1 && button_number <= 24) {
+              // Map icon names to glyphs (unicode private use area chars)
+              std::string glyph;
+              if (icon_name == "mdi-sconce") glyph = "\U0000f02a"; // sconce
+              else if (icon_name == "mdi-fan") glyph = "\U0000f168"; // fan
+              else if (icon_name == "mdi-lightbulb") glyph = "\U0000e0f0"; // lightbulb
+              else if (icon_name == "mdi-dine-lamp") glyph = "\U0000f29b"; // Dine Lamp
+              else if (icon_name == "mdi-lamp") glyph = "\U0000e21e"; // lamp
+              else if (icon_name == "mdi-shades") glyph = "\U0000ec12"; // shades
+              else if (icon_name == "mdi-factory") glyph = "\U0000ebbc"; // Factory
+              else if (icon_name == "mdi-power") glyph = "\U0000e63c"; // power icon
+              else if (icon_name == "mdi-lock-closed") glyph = "\U0000e897"; // lock closed
+              else if (icon_name == "mdi-alarm") glyph = "\U0000e855"; // alarm
+              else if (icon_name == "mdi-siren") glyph = "\U0000f3a7"; // siren
+              else if (icon_name == "mdi-camera") glyph = "\U0000efe9"; // camera
+              else if (icon_name == "mdi-close") glyph = "\U0000E5CD"; // close
+              else if (icon_name == "mdi-settings") glyph = "\U0000E8B8"; // settings
+              else if (icon_name == "mdi-fire") glyph = "\U0000E7C8"; // fire
+              else if (icon_name == "mdi-lightning") glyph = "\U0000ec1c"; // lightning
+              else if (icon_name == "mdi-heart") glyph = "\U0000f292"; // heart
+              else if (icon_name == "mdi-home") glyph = "\U0000E88A"; // home
+              else if (icon_name == "mdi-menu") glyph = "\U0000E5D2"; // menu
+              else if (icon_name == "mdi-microphone") glyph = "\U0000E3FA"; // microphone
+              else if (icon_name == "mdi-phone") glyph = "\U0000e61d"; // phone
+              else if (icon_name == "mdi-dog") glyph = "\U0000f149"; // dog
+              else if (icon_name == "mdi-pets") glyph = "\U0000e91d"; // pets
+              else if (icon_name == "mdi-refresh") glyph = "\U0000e5d5"; // refresh
+              else if (icon_name == "mdi-weather-sunny") glyph = "\U0000e81a"; // weather sunny
+              else if (icon_name == "mdi-weather-night") glyph = "\U0000f34f"; // weather night
+              else if (icon_name == "mdi-weather-partlycloudy-night") glyph = "\U0000f174"; // partly cloudy night
+              else if (icon_name == "mdi-weather-partlycloudy-day") glyph = "\U0000f172"; // partly cloudy day
+              else if (icon_name == "mdi-weather-cloudy") glyph = "\U0000e2bd"; // cloudy
+              else if (icon_name == "mdi-weather-fog") glyph = "\U0000e818"; // fog
+              else if (icon_name == "mdi-weather-hail") glyph = "\U0000f67f"; // hail
+              else if (icon_name == "mdi-weather-lightning") glyph = "\U0000ebdb"; // lightning
+              else if (icon_name == "mdi-weather-rainy") glyph = "\U0000f176"; // rainy
+              else if (icon_name == "mdi-weather-snowy") glyph = "\U0000e2cd"; // snowy
+              else if (icon_name == "mdi-weather-windy") glyph = "\U0000ec0c"; // windy
+              else if (icon_name == "mdi-weather-tornado") glyph = "\U0000e199"; // tornado
+              else glyph = "\U0000e199";  // default tornado fallback
+
+              // Update the right global based on button_number
+              switch (button_number) {
+                case 1: id(btn_icon_1) = glyph; break;
+                case 2: id(btn_icon_2) = glyph; break;
+                case 3: id(btn_icon_3) = glyph; break;
+                case 4: id(btn_icon_4) = glyph; break;
+                case 5: id(btn_icon_5) = glyph; break;
+                case 6: id(btn_icon_6) = glyph; break;
+                case 7: id(btn_icon_7) = glyph; break;
+                case 8: id(btn_icon_8) = glyph; break;
+                case 9: id(btn_icon_9) = glyph; break;
+                case 10: id(btn_icon_10) = glyph; break;
+                case 11: id(btn_icon_11) = glyph; break;
+                case 12: id(btn_icon_12) = glyph; break;
+                case 13: id(btn_icon_13) = glyph; break;
+                case 14: id(btn_icon_14) = glyph; break;
+                case 15: id(btn_icon_15) = glyph; break;
+                case 16: id(btn_icon_16) = glyph; break;
+                case 17: id(btn_icon_17) = glyph; break;
+                case 18: id(btn_icon_18) = glyph; break;
+                case 19: id(btn_icon_19) = glyph; break;
+                case 20: id(btn_icon_20) = glyph; break;
+                case 21: id(btn_icon_21) = glyph; break;
+                case 22: id(btn_icon_22) = glyph; break;
+                case 23: id(btn_icon_23) = glyph; break;
+                case 24: id(btn_icon_24) = glyph; break;
+              }
+            }
+        - lambda: |-
+            id(refresh_button_number) = button_number;
+            id(refresh_button_by_number).execute();
+
+    # Set button color only
+    - service: set_button_color
+      variables:
+        button_number: int
+        color_hex: int
+      then:
+        - lambda: |-
+            if (button_number >= 1 && button_number <= 24) {
+              switch(button_number) {
+                case 1: id(btn_color_1) = color_hex; break;
+                case 2: id(btn_color_2) = color_hex; break;
+                case 3: id(btn_color_3) = color_hex; break;
+                case 4: id(btn_color_4) = color_hex; break;
+                case 5: id(btn_color_5) = color_hex; break;
+                case 6: id(btn_color_6) = color_hex; break;
+                case 7: id(btn_color_7) = color_hex; break;
+                case 8: id(btn_color_8) = color_hex; break;
+                case 9: id(btn_color_9) = color_hex; break;
+                case 10: id(btn_color_10) = color_hex; break;
+                case 11: id(btn_color_11) = color_hex; break;
+                case 12: id(btn_color_12) = color_hex; break;
+                case 13: id(btn_color_13) = color_hex; break;
+                case 14: id(btn_color_14) = color_hex; break;
+                case 15: id(btn_color_15) = color_hex; break;
+                case 16: id(btn_color_16) = color_hex; break;
+                case 17: id(btn_color_17) = color_hex; break;
+                case 18: id(btn_color_18) = color_hex; break;
+                case 19: id(btn_color_19) = color_hex; break;
+                case 20: id(btn_color_20) = color_hex; break;
+                case 21: id(btn_color_21) = color_hex; break;
+                case 22: id(btn_color_22) = color_hex; break;
+                case 23: id(btn_color_23) = color_hex; break;
+                case 24: id(btn_color_24) = color_hex; break;
+              }
+              
+            }
+        - lambda: |-
+            id(refresh_button_number) = button_number;
+            id(refresh_button_by_number).execute();
+    
+    # Set both label and color
+    - service: set_button
+      variables:
+        button_number: int
+        icon_name: string
+        label_text: string
+        color_hex: int
+      then:
+        - logger.log:
+            level: DEBUG
+            format: "Button %d, label=%s, color=0x%06X"
+            args:
+              - button_number
+              - label_text
+              - color_hex
+        - lambda: |-
+            if (button_number >= 1 && button_number <= 24) {
+              // Map icon names to glyphs (unicode private use area chars)
+              std::string glyph;
+              if (icon_name == "mdi-sconce") glyph = "\U0000f02a"; // sconce
+              else if (icon_name == "mdi-fan") glyph = "\U0000f168"; // fan
+              else if (icon_name == "mdi-lightbulb") glyph = "\U0000e0f0"; // lightbulb
+              else if (icon_name == "mdi-dine-lamp") glyph = "\U0000f29b"; // Dine Lamp
+              else if (icon_name == "mdi-lamp") glyph = "\U0000e21e"; // lamp
+              else if (icon_name == "mdi-shades") glyph = "\U0000ec12"; // shades
+              else if (icon_name == "mdi-factory") glyph = "\U0000ebbc"; // Factory
+              else if (icon_name == "mdi-power") glyph = "\U0000e63c"; // power icon
+              else if (icon_name == "mdi-lock-closed") glyph = "\U0000e897"; // lock closed
+              else if (icon_name == "mdi-alarm") glyph = "\U0000e855"; // alarm
+              else if (icon_name == "mdi-siren") glyph = "\U0000f3a7"; // siren
+              else if (icon_name == "mdi-camera") glyph = "\U0000efe9"; // camera
+              else if (icon_name == "mdi-close") glyph = "\U0000E5CD"; // close
+              else if (icon_name == "mdi-settings") glyph = "\U0000E8B8"; // settings
+              else if (icon_name == "mdi-fire") glyph = "\U0000E7C8"; // fire
+              else if (icon_name == "mdi-lightning") glyph = "\U0000ec1c"; // lightning
+              else if (icon_name == "mdi-heart") glyph = "\U0000f292"; // heart
+              else if (icon_name == "mdi-home") glyph = "\U0000E88A"; // home
+              else if (icon_name == "mdi-menu") glyph = "\U0000E5D2"; // menu
+              else if (icon_name == "mdi-microphone") glyph = "\U0000E3FA"; // microphone
+              else if (icon_name == "mdi-phone") glyph = "\U0000e61d"; // phone
+              else if (icon_name == "mdi-dog") glyph = "\U0000f149"; // dog
+              else if (icon_name == "mdi-pets") glyph = "\U0000e91d"; // pets
+              else if (icon_name == "mdi-refresh") glyph = "\U0000e5d5"; // refresh
+              else if (icon_name == "mdi-weather-sunny") glyph = "\U0000e81a"; // weather sunny
+              else if (icon_name == "mdi-weather-night") glyph = "\U0000f34f"; // weather night
+              else if (icon_name == "mdi-weather-partlycloudy-night") glyph = "\U0000f174"; // partly cloudy night
+              else if (icon_name == "mdi-weather-partlycloudy-day") glyph = "\U0000f172"; // partly cloudy day
+              else if (icon_name == "mdi-weather-cloudy") glyph = "\U0000e2bd"; // cloudy
+              else if (icon_name == "mdi-weather-fog") glyph = "\U0000e818"; // fog
+              else if (icon_name == "mdi-weather-hail") glyph = "\U0000f67f"; // hail
+              else if (icon_name == "mdi-weather-lightning") glyph = "\U0000ebdb"; // lightning
+              else if (icon_name == "mdi-weather-rainy") glyph = "\U0000f176"; // rainy
+              else if (icon_name == "mdi-weather-snowy") glyph = "\U0000e2cd"; // snowy
+              else if (icon_name == "mdi-weather-windy") glyph = "\U0000ec0c"; // windy
+              else if (icon_name == "mdi-weather-tornado") glyph = "\U0000e199"; // tornado
+              else glyph = "\U0000e199";  // default tornado fallback
+
+              // Update the right global based on button_number
+              switch (button_number) {
+
+                case 1: id(btn_icon_1) = glyph; id(btn_label_1) = label_text; id(btn_color_1) = color_hex; break;
+                case 2: id(btn_icon_2) = glyph; id(btn_label_2) = label_text; id(btn_color_2) = color_hex; break;
+                case 3: id(btn_icon_3) = glyph; id(btn_label_3) = label_text; id(btn_color_3) = color_hex; break;
+                case 4: id(btn_icon_4) = glyph; id(btn_label_4) = label_text; id(btn_color_4) = color_hex; break;
+                case 5: id(btn_icon_5) = glyph; id(btn_label_5) = label_text; id(btn_color_5) = color_hex; break;
+                case 6: id(btn_icon_6) = glyph; id(btn_label_6) = label_text; id(btn_color_6) = color_hex; break;
+                case 7: id(btn_icon_7) = glyph; id(btn_label_7) = label_text; id(btn_color_7) = color_hex; break;
+                case 8: id(btn_icon_8) = glyph; id(btn_label_8) = label_text; id(btn_color_8) = color_hex; break;
+                case 9: id(btn_icon_9) = glyph; id(btn_label_9) = label_text; id(btn_color_9) = color_hex; break;
+                case 10: id(btn_icon_10) = glyph; id(btn_label_10) = label_text; id(btn_color_10) = color_hex; break;
+                case 11: id(btn_icon_11) = glyph; id(btn_label_11) = label_text; id(btn_color_11) = color_hex; break;
+                case 12: id(btn_icon_12) = glyph; id(btn_label_12) = label_text; id(btn_color_12) = color_hex; break;
+                case 13: id(btn_icon_13) = glyph; id(btn_label_13) = label_text; id(btn_color_13) = color_hex; break;
+                case 14: id(btn_icon_14) = glyph; id(btn_label_14) = label_text; id(btn_color_14) = color_hex; break;
+                case 15: id(btn_icon_15) = glyph; id(btn_label_15) = label_text; id(btn_color_15) = color_hex; break;
+                case 16: id(btn_icon_16) = glyph; id(btn_label_16) = label_text; id(btn_color_16) = color_hex; break;
+                case 17: id(btn_icon_17) = glyph; id(btn_label_17) = label_text; id(btn_color_17) = color_hex; break;
+                case 18: id(btn_icon_18) = glyph; id(btn_label_18) = label_text; id(btn_color_18) = color_hex; break;
+                case 19: id(btn_icon_19) = glyph; id(btn_label_19) = label_text; id(btn_color_19) = color_hex; break;
+                case 20: id(btn_icon_20) = glyph; id(btn_label_20) = label_text; id(btn_color_20) = color_hex; break;
+                case 21: id(btn_icon_21) = glyph; id(btn_label_21) = label_text; id(btn_color_21) = color_hex; break;
+                case 22: id(btn_icon_22) = glyph; id(btn_label_22) = label_text; id(btn_color_22) = color_hex; break;
+                case 23: id(btn_icon_23) = glyph; id(btn_label_23) = label_text; id(btn_color_23) = color_hex; break;
+                case 24: id(btn_icon_24) = glyph; id(btn_label_24) = label_text; id(btn_color_24) = color_hex; break;
+              }
+            }
+        - lambda: |-
+            id(refresh_button_number) = button_number;
+            id(refresh_button_by_number).execute();
+    
+    # Navigate to page
+    - service: show_page
+      variables:
+        page_num: int
+      then:
+        - lambda: |-
+            if (page_num >= 0 && page_num <= 3) {
+              id(current_page) = page_num;
+              // Page navigation handled by nav buttons
+            }
+    
+    # Set brightness
+    - service: set_brightness
+      variables:
+        brightness: int
+      then:
+        - lambda: |-
+            if (brightness >= 0 && brightness <= 100) {
+              auto call = id(backlight).turn_on();
+              call.set_brightness(brightness / 100.0);
+              call.perform();
+            }
+    
+    # Wake/sleep screen
+    - service: wake_screen
+      then:
+        - lambda: |-
+            id(last_activity) = millis();
+            if (!id(backlight).current_values.is_on()) {
+              auto call = id(backlight).turn_on();
+              call.perform();
+            }
+    
+    - service: sleep_screen
+      then:
+        - lambda: |-
+            auto call = id(backlight).turn_off();
+            call.perform();
+    
+    # Set screen timeout
+    - service: set_screen_timeout
+      variables:
+        timeout: int
+        label_text: string
+      then:
+        - logger.log:
+            level: DEBUG
+            format: "Timeout %d, Text %s"
+            args:
+              - timeout
+              - label_text
+        - lambda: |-
+            if (timeout >= 10 && timeout <= 300) {
+              id(screen_timeout) = timeout;
+            }
+    
+    # Trigger button press programmatically
+    - service: trigger_button
+      variables:
+        button_number: int
+      then:
+        - lambda: |-
+            if (button_number >= 1 && button_number <= 24) {
+              switch(button_number) {
+                case 1: id(btn_1_press).publish_state(true); delay(100); id(btn_1_press).publish_state(false); break;
+                case 2: id(btn_2_press).publish_state(true); delay(100); id(btn_2_press).publish_state(false); break;
+                case 3: id(btn_3_press).publish_state(true); delay(100); id(btn_3_press).publish_state(false); break;
+                case 4: id(btn_4_press).publish_state(true); delay(100); id(btn_4_press).publish_state(false); break;
+                case 5: id(btn_5_press).publish_state(true); delay(100); id(btn_5_press).publish_state(false); break;
+                case 6: id(btn_6_press).publish_state(true); delay(100); id(btn_6_press).publish_state(false); break;
+                case 7: id(btn_7_press).publish_state(true); delay(100); id(btn_7_press).publish_state(false); break;
+                case 8: id(btn_8_press).publish_state(true); delay(100); id(btn_8_press).publish_state(false); break;
+                case 9: id(btn_9_press).publish_state(true); delay(100); id(btn_9_press).publish_state(false); break;
+                case 10: id(btn_10_press).publish_state(true); delay(100); id(btn_10_press).publish_state(false); break;
+                case 11: id(btn_11_press).publish_state(true); delay(100); id(btn_11_press).publish_state(false); break;
+                case 12: id(btn_12_press).publish_state(true); delay(100); id(btn_12_press).publish_state(false); break;
+                case 13: id(btn_13_press).publish_state(true); delay(100); id(btn_13_press).publish_state(false); break;
+                case 14: id(btn_14_press).publish_state(true); delay(100); id(btn_14_press).publish_state(false); break;
+                case 15: id(btn_15_press).publish_state(true); delay(100); id(btn_15_press).publish_state(false); break;
+                case 16: id(btn_16_press).publish_state(true); delay(100); id(btn_16_press).publish_state(false); break;
+                case 17: id(btn_17_press).publish_state(true); delay(100); id(btn_17_press).publish_state(false); break;
+                case 18: id(btn_18_press).publish_state(true); delay(100); id(btn_18_press).publish_state(false); break;
+                case 19: id(btn_19_press).publish_state(true); delay(100); id(btn_19_press).publish_state(false); break;
+                case 20: id(btn_20_press).publish_state(true); delay(100); id(btn_20_press).publish_state(false); break;
+                case 21: id(btn_21_press).publish_state(true); delay(100); id(btn_21_press).publish_state(false); break;
+                case 22: id(btn_22_press).publish_state(true); delay(100); id(btn_22_press).publish_state(false); break;
+                case 23: id(btn_23_press).publish_state(true); delay(100); id(btn_23_press).publish_state(false); break;
+                case 24: id(btn_24_press).publish_state(true); delay(100); id(btn_24_press).publish_state(false); break;
+              }
+            }
