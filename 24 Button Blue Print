@@ -1,0 +1,284 @@
+blueprint:
+  name: Mini Display Button Pushed Blueprint
+  description: Handle button presses from a single sensor indicating pushed button number
+  domain: automation
+
+  input:
+    button_pushed_sensor:
+      name: Button Pushed Sensor
+      description: Sensor entity that reports the pushed button number as state
+      selector:
+        entity:
+          domain: sensor
+
+    action_button_1:
+      name: Action for Button 1 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_2:
+      name: Action for Button 2 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_3:
+      name: Action for Button 3 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_4:
+      name: Action for Button 4 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_5:
+      name: Action for Button 5 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_6:
+      name: Action for Button 6 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_7:
+      name: Action for Button 7 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_8:
+      name: Action for Button 8 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_9:
+      name: Action for Button 9 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_10:
+      name: Action for Button 10 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_11:
+      name: Action for Button 11 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_12:
+      name: Action for Button 12 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_13:
+      name: Action for Button 13 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_14:
+      name: Action for Button 14 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_15:
+      name: Action for Button 15 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_16:
+      name: Action for Button 16 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_17:
+      name: Action for Button 17 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_18:
+      name: Action for Button 18 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_19:
+      name: Action for Button 19 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_20:
+      name: Action for Button 20 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_21:
+      name: Action for Button 21 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_22:
+      name: Action for Button 22 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_23:
+      name: Action for Button 23 Press
+      selector:
+        action: {}
+      default: []
+
+    action_button_24:
+      name: Action for Button 24 Press
+      selector:
+        action: {}
+      default: []
+
+trigger:
+  - platform: state
+    entity_id: !input button_pushed_sensor
+    to:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      - '5'
+      - '6'
+      - '7'
+      - '8'
+      - '9'
+      - '10'
+      - '11'
+      - '12'
+      - '13'
+      - '14'
+      - '15'
+      - '16'
+      - '17'
+      - '18'
+      - '19'
+      - '20'
+      - '21'
+      - '22'
+      - '23'
+      - '24'
+
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '1' }}"
+        sequence: !input action_button_1
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '2' }}"
+        sequence: !input action_button_2
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '3' }}"
+        sequence: !input action_button_3
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '4' }}"
+        sequence: !input action_button_4
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '5' }}"
+        sequence: !input action_button_5
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '6' }}"
+        sequence: !input action_button_6
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '7' }}"
+        sequence: !input action_button_7
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '8' }}"
+        sequence: !input action_button_8
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '9' }}"
+        sequence: !input action_button_9
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '10' }}"
+        sequence: !input action_button_10
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '11' }}"
+        sequence: !input action_button_11
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '12' }}"
+        sequence: !input action_button_12
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '13' }}"
+        sequence: !input action_button_13
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '14' }}"
+        sequence: !input action_button_14
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '15' }}"
+        sequence: !input action_button_15
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '16' }}"
+        sequence: !input action_button_16
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '17' }}"
+        sequence: !input action_button_17
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '18' }}"
+        sequence: !input action_button_18
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '19' }}"
+        sequence: !input action_button_19
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '20' }}"
+        sequence: !input action_button_20
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '21' }}"
+        sequence: !input action_button_21
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '22' }}"
+        sequence: !input action_button_22
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '23' }}"
+        sequence: !input action_button_23
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == '24' }}"
+        sequence: !input action_button_24
