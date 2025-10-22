@@ -498,7 +498,7 @@ light:
     default_transition_length: 0s
     # onboard rgb led
   - platform: rgb
-    name: "Front LED"
+    name: "Rear LED"
     id: front_led
     restore_mode: ALWAYS_OFF
     red: led_red
